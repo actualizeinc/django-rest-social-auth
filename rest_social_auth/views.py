@@ -12,7 +12,7 @@ from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.encoding import iri_to_uri
 from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from social_django.utils import psa, STORAGE
 from social_django.views import _do_login as social_auth_login
 from social_core.backends.oauth import BaseOAuth1
@@ -109,6 +109,7 @@ class BaseSocialAuthView(GenericAPIView):
         return self.request.data.copy()
 
     @method_decorator(never_cache)
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         input_data = self.get_serializer_in_data()
         provider_name = self.get_provider_name(input_data)
